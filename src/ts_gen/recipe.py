@@ -22,14 +22,21 @@ class Recipe:
 
     operations: tuple[tuple[str, Operation], ...] = ()
 
+    def __post_init__(self) -> None:
+        operations = tuple((name, operation) for name, operation in self.operations)
+        names: set[str] = set()
+        for name, operation in operations:
+            if not isinstance(operation, Operation):
+                raise ValidationError(f"operation must be a ts_gen Operation, got {operation!r}")
+            if not isinstance(name, str) or not name.strip():
+                raise ValidationError(f"name must be a non-empty string, got {name!r}")
+            if name in names:
+                raise ValidationError(f"operation name {name!r} is already used in this recipe; names must be unique")
+            names.add(name)
+        object.__setattr__(self, "operations", operations)
+
     def add(self, operation: Operation, *, name: str) -> Recipe:
         """Return a new recipe with ``operation`` appended under ``name``; this recipe is unchanged."""
-        if not isinstance(operation, Operation):
-            raise ValidationError(f"operation must be an ts_gen Operation, got {operation!r}")
-        if not isinstance(name, str) or not name.strip():
-            raise ValidationError(f"name must be a non-empty string, got {name!r}")
-        if any(existing == name for existing, _ in self.operations):
-            raise ValidationError(f"operation name {name!r} is already used in this recipe; names must be unique")
         return Recipe(operations=(*self.operations, (name, operation)))
 
     def generate(
