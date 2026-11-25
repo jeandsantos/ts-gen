@@ -75,7 +75,12 @@ class Duration:
         return cls(count=int(count), unit=unit)
 
     def to_timedelta(self) -> pd.Timedelta:
-        delta = pd.Timedelta(self.count * self.unit.length)
+        try:
+            delta = pd.Timedelta(self.count * self.unit.length)
+        except (OverflowError, ValueError) as error:
+            raise ValidationError(
+                f"duration {self.count}{self.unit.value} exceeds the supported timedelta range"
+            ) from error
         assert isinstance(delta, pd.Timedelta)
         return delta
 
