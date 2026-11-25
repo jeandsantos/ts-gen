@@ -20,3 +20,7 @@ The environment is managed with uv; never use `pip` directly. Add dependencies w
 - Type-check: `uv run ty check`
 - Lint/format: `uv run ruff check --fix` and `uv run ruff format`
 - All hooks: `uv run prek run --all-files`
+
+## Commits
+
+When making changes, commit each coherent, verified milestone and follow `docs/agents/commit-guidelines.md` for commit cadence and message format.
