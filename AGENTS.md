@@ -1,16 +1,24 @@
-## Agent skills
+# Agent skills
 
-### Issue tracker
+## Issue tracker
 
 Issues and specs live in GitHub Issues for `jeandsantos/ts-gen`. Before reading or publishing tickets, read `docs/agents/issue-tracker.md`.
 
-### Triage labels
+## Triage labels
 
 Use the five default triage labels. Before triaging or applying triage labels, read `docs/agents/triage-labels.md`.
 
-### Domain docs
+## Domain docs
 
 Single-context layout. Before exploring domain concepts or proposing architectural changes, read `docs/agents/domain.md`.
+
+## Documentation guidelines
+
+Before writing or changing documentation files, read `docs/agents/documentation-guidelines.md` and apply its preferences.
+
+## Coding guidelines
+
+Before writing or changing Python code, read `docs/agents/coding-guidelines.md` and apply its design preferences.
 
 ## Development commands
 

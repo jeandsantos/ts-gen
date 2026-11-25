@@ -1,9 +1,11 @@
 # ts-gen
+
 Time series generator for Python
 
 ## Development
 
-This project uses [uv](https://docs.astral.sh/uv/) for environment and dependency management, and [prek](https://github.com/j178/prek) to run the hooks in `.pre-commit-config.yaml`.
+This project uses [uv](https://docs.astral.sh/uv/) for environment and dependency management, and
+[prek](https://github.com/j178/prek) to run the hooks in `.pre-commit-config.yaml`.
 
 ```bash
 uv sync                      # create .venv and install the package with dev dependencies
