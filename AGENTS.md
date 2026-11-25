@@ -1,16 +1,24 @@
-## Agent skills
+# Agent skills
 
-### Issue tracker
+## Issue tracker
 
 Issues and specs live in GitHub Issues for `jeandsantos/ts-gen`. Before reading or publishing tickets, read `docs/agents/issue-tracker.md`.
 
-### Triage labels
+## Triage labels
 
 Use the five default triage labels. Before triaging or applying triage labels, read `docs/agents/triage-labels.md`.
 
-### Domain docs
+## Domain docs
 
 Single-context layout. Before exploring domain concepts or proposing architectural changes, read `docs/agents/domain.md`.
+
+## Documentation guidelines
+
+Before writing or changing documentation files, read `docs/agents/documentation-guidelines.md` and apply its preferences.
+
+## Coding guidelines
+
+Before writing or changing Python code, read `docs/agents/coding-guidelines.md` and apply its design preferences.
 
 ## Development commands
 
@@ -20,3 +28,7 @@ The environment is managed with uv; never use `pip` directly. Add dependencies w
 - Type-check: `uv run ty check`
 - Lint/format: `uv run ruff check --fix` and `uv run ruff format`
 - All hooks: `uv run prek run --all-files`
+
+## Commits
+
+When making changes, commit each coherent, verified milestone and follow `docs/agents/commit-guidelines.md` for commit cadence and message format.
