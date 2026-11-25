@@ -1,0 +1,42 @@
+[project]
+name = "ts-gen"
+version = "0.1.0"
+description = "Composable synthetic time-series generation for Python"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Jean Dos Santos", email = "jeandsantos88@gmail.com" }]
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "pyyaml>=6.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.10,<0.14"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF", "PT", "N"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--strict-markers", "--strict-config"]
+
+[dependency-groups]
+dev = [
+    "prek>=0.5.11",
+    "pytest>=9.2.0",
+    "ruff>=0.17.6",
+    "ty==0.0.110",
+]
