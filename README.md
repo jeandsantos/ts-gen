@@ -17,7 +17,7 @@ recipe = (
 )
 result = recipe.generate(start="2024-01-01", end="2024-01-08", step="1h", seed=42)
 result.observed  # pandas Series indexed by timestamp
-result.seed  # effective seed; a fresh one is drawn when `seed` is omitted
+result.seed  # effective seed
 ```
 
 - The grid includes `start` and excludes `end`.
@@ -29,6 +29,7 @@ result.seed  # effective seed; a fresh one is drawn when `seed` is omitted
 - Changing `step` does not change trend values at shared timestamps.
 - `add` returns a new recipe and leaves the original unchanged.
 - Operation names must be unique within a recipe.
+- Omitting `seed` draws a fresh one, exposed as `result.seed`.
 - Invalid inputs raise `ts_gen.ValidationError`.
 
 ## Development

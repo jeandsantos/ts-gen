@@ -28,7 +28,10 @@ class TimeUnit(StrEnum):
 
     @classmethod
     def from_alias(cls, alias: str) -> TimeUnit | None:
-        return _UNIT_ALIASES.get(alias)
+        try:
+            return cls(alias)
+        except ValueError:
+            return None
 
 
 _UNIT_LENGTHS = {
@@ -37,13 +40,6 @@ _UNIT_LENGTHS = {
     TimeUnit.HOUR: timedelta(hours=1),
     TimeUnit.DAY: timedelta(hours=24),
     TimeUnit.WEEK: timedelta(days=7),
-}
-_UNIT_ALIASES = {
-    **dict.fromkeys(("s", "sec", "second", "seconds"), TimeUnit.SECOND),
-    **dict.fromkeys(("min", "minute", "minutes"), TimeUnit.MINUTE),
-    **dict.fromkeys(("h", "hour", "hours"), TimeUnit.HOUR),
-    **dict.fromkeys(("d", "day", "days"), TimeUnit.DAY),
-    **dict.fromkeys(("w", "week", "weeks"), TimeUnit.WEEK),
 }
 
 STEP_UNITS = frozenset({TimeUnit.SECOND, TimeUnit.MINUTE, TimeUnit.HOUR})
@@ -68,7 +64,7 @@ class Duration:
             raise ValidationError(f"{label} must be a string such as '15min', got {text!r}")
         match = cls._PATTERN.match(text)
         count = match["count"] if match else ""
-        if match is None or not count.isdigit() or int(count) <= 0:
+        if match is None or not (count.isascii() and count.isdigit()) or int(count) <= 0:
             raise ValidationError(f"{label} {text!r} must be a positive integer followed by a unit, e.g. '15min'")
         unit = TimeUnit.from_alias(match["unit"])
         if unit is None or unit not in allowed:

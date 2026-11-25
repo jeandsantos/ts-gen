@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from ts_gen import ConstantTrend, LinearTrend, Recipe, ValidationError
+from ts_gen import ConstantTrend, Recipe, ValidationError
 
 
 class TestRecipeGenerate:
@@ -15,14 +15,8 @@ class TestRecipeGenerate:
         ]
         assert result.observed.tolist() == [0.0, 0.0, 0.0]
 
-    def test_generate_constant_and_linear_contributions_sum(self, short_range: dict) -> None:
-        recipe = (
-            Recipe()
-            .add(ConstantTrend(value=10.0), name="baseline")
-            .add(LinearTrend(intercept=1.0, slope=2.0, per="1h"), name="growth")
-        )
-
-        result = recipe.generate(**short_range, step="1h")
+    def test_generate_constant_and_linear_contributions_sum(self, trend_recipe: Recipe, short_range: dict) -> None:
+        result = trend_recipe.generate(**short_range, step="1h")
 
         assert result.observed.tolist() == [11.0, 13.0, 15.0]
 
@@ -46,6 +40,13 @@ class TestRecipeGenerate:
         assert len(empty_recipe.generate(start=start, end=end, step="45min").observed) == 8
         assert len(empty_recipe.generate(start=start, end=end, step="2h").observed) == 3
 
+    def test_generate_reuses_recipe_across_ranges(self, trend_recipe: Recipe, short_range: dict) -> None:
+        first = trend_recipe.generate(**short_range, step="1h").observed
+        trend_recipe.generate(start="2025-06-01", end="2025-06-02", step="1min")
+        second = trend_recipe.generate(**short_range, step="1h").observed
+
+        pd.testing.assert_series_equal(first, second)
+
 
 class TestRecipeAdd:
     def test_add_leaves_original_recipe_unchanged(self, empty_recipe: Recipe, short_range: dict) -> None:
@@ -53,13 +54,6 @@ class TestRecipeAdd:
 
         assert empty_recipe.generate(**short_range, step="1h").observed.tolist() == [0.0, 0.0, 0.0]
         assert extended.generate(**short_range, step="1h").observed.tolist() == [5.0, 5.0, 5.0]
-
-    def test_add_recipe_is_reusable_across_ranges(self, trend_recipe: Recipe, short_range: dict) -> None:
-        first = trend_recipe.generate(**short_range, step="1h").observed
-        trend_recipe.generate(start="2025-06-01", end="2025-06-02", step="1min")
-        second = trend_recipe.generate(**short_range, step="1h").observed
-
-        pd.testing.assert_series_equal(first, second)
 
 
 class TestRecipeGenerateSeed:
@@ -100,7 +94,9 @@ class TestRecipeGenerateValidation:
             ("-1h", "positive integer"),
             ("1.5h", "positive integer"),
             ("h", "positive integer"),
+            ("²h", "positive integer"),
             ("1d", "unsupported step unit 'd'"),
+            ("1hour", "unsupported step unit 'hour'"),
             ("1month", "unsupported step unit 'month'"),
             ("1fortnight", "unsupported step unit 'fortnight'"),
         ],
